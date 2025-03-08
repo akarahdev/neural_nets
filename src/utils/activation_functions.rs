@@ -7,7 +7,7 @@ pub trait ActivationFn: Clone + Copy + std::fmt::Debug {
     fn activate(&self, x: f32) -> f32;
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Linear;
 impl ActivationFn for Linear {
     fn activate(&self, x: f32) -> f32 {
@@ -15,7 +15,7 @@ impl ActivationFn for Linear {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct BinaryStep;
 impl ActivationFn for BinaryStep {
     fn activate(&self, x: f32) -> f32 {
@@ -23,7 +23,7 @@ impl ActivationFn for BinaryStep {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Sigmoid;
 impl ActivationFn for Sigmoid {
     fn activate(&self, x: f32) -> f32 {
@@ -31,7 +31,7 @@ impl ActivationFn for Sigmoid {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Tanh;
 impl ActivationFn for Tanh {
     fn activate(&self, x: f32) -> f32 {
@@ -39,7 +39,7 @@ impl ActivationFn for Tanh {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Relu;
 impl ActivationFn for Relu {
     fn activate(&self, x: f32) -> f32 {
@@ -47,7 +47,7 @@ impl ActivationFn for Relu {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
 pub struct LeakyRelu {
     pub factor: f32,
 }
@@ -57,7 +57,7 @@ impl ActivationFn for LeakyRelu {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
 pub struct Elu {
     pub factor: f32,
 }
@@ -71,7 +71,7 @@ impl ActivationFn for Elu {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Swish;
 impl ActivationFn for Swish {
     fn activate(&self, x: f32) -> f32 {
@@ -80,7 +80,7 @@ impl ActivationFn for Swish {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct Gelu;
 impl ActivationFn for Gelu {
     fn activate(&self, x: f32) -> f32 {

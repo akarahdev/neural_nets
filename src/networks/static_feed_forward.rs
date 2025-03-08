@@ -2,6 +2,7 @@ use crate::utils::ActivationFn;
 
 use super::NeuralNetwork;
 
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct StaticFeedForwardNetwork<
     const I: usize,
     const HN: usize,
@@ -47,6 +48,7 @@ impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: Acti
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct FeedForwardLayer<const S: usize, const PL: usize> {
     neurons: [FeedForwardNeuron<PL>; S],
 }
@@ -65,6 +67,7 @@ impl<const S: usize, const PL: usize> FeedForwardLayer<S, PL> {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct FeedForwardNeuron<const PL: usize> {
     weights: [f32; PL],
     bias: f32,

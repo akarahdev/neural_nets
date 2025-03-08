@@ -1,6 +1,6 @@
 use super::NeuralNetwork;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct AndThenNetwork<
     const I: usize,
     const M: usize,
@@ -20,7 +20,7 @@ impl<const I: usize, const M: usize, const O: usize, L: NeuralNetwork<I, M>, R: 
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct AlongsideNetwork<
     const I1: usize,
     const I2: usize,
@@ -56,7 +56,7 @@ impl<
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
 pub struct ReplicateInputNetwork<
     const I: usize,
     const O1: usize,
@@ -110,7 +110,7 @@ mod tests {
     #[test]
     fn combine_doublers() {
         let perceptron = Perceptron::new([2.0], 0.0, ActFns::linear());
-        let mut combined = perceptron.clone().alongside(perceptron);
+        let mut combined = perceptron.alongside(perceptron);
         assert_eq!(combined.feed(&[1.0, 2.0]), [2.0, 4.0]);
     }
 

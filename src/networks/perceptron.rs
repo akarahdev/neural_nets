@@ -2,7 +2,7 @@ use crate::utils::ActivationFn;
 
 use super::NeuralNetwork;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Copy, PartialOrd)]
 pub struct Perceptron<const I: usize, F: ActivationFn> {
     weights: [f32; I],
     bias: f32,
