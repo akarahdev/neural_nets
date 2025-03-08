@@ -1,13 +1,15 @@
+use crate::utils::ActivationFn;
+
 use super::NeuralNetwork;
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Perceptron<const I: usize, F: Fn(f16) -> f16> {
+pub struct Perceptron<const I: usize, F: ActivationFn> {
     weights: [f16; I],
     bias: f16,
     activation_function: F,
 }
 
-impl<const I: usize, F: Fn(f16) -> f16> Perceptron<I, F> {
+impl<const I: usize, F: ActivationFn> Perceptron<I, F> {
     pub fn new(weights: [f16; I], bias: f16, activation_function: F) -> Perceptron<I, F> {
         Perceptron {
             weights,
@@ -17,14 +19,14 @@ impl<const I: usize, F: Fn(f16) -> f16> Perceptron<I, F> {
     }
 }
 
-impl<const I: usize, F: Fn(f16) -> f16> NeuralNetwork<I, 1> for Perceptron<I, F> {
+impl<const I: usize, F: ActivationFn> NeuralNetwork<I, 1> for Perceptron<I, F> {
     fn feed(&mut self, arr: &[f16; I]) -> [f16; 1] {
         let mut sum = 0.0;
         for item in arr.iter().enumerate() {
             sum += *item.1 * self.weights[item.0];
         }
         sum += self.bias;
-        [(self.activation_function)(sum)]
+        [self.activation_function.activate(sum)]
     }
 }
 
@@ -36,7 +38,7 @@ mod tests {
 
     #[test]
     pub fn perceptron_sum() {
-        let mut perceptron = Perceptron::new([1.0, 1.0], 0.0, |x| x);
+        let mut perceptron = Perceptron::new([1.0, 1.0], 0.0, ActFns::linear());
         let output = perceptron.feed(&[1.0, 2.0]);
         assert_eq!(output[0], 3.0);
     }

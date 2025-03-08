@@ -1,3 +1,5 @@
+use crate::utils::ActivationFn;
+
 use super::NeuralNetwork;
 
 pub struct StaticFeedForwardNetwork<
@@ -5,7 +7,7 @@ pub struct StaticFeedForwardNetwork<
     const HN: usize,
     const IHLC: usize,
     const O: usize,
-    F: Fn(f16) -> f16,
+    F: ActivationFn,
 > {
     first_hidden_layer: FeedForwardLayer<HN, I>,
     intermediate_hidden_layers: [FeedForwardLayer<HN, HN>; IHLC],
@@ -13,7 +15,7 @@ pub struct StaticFeedForwardNetwork<
     activation_function: F,
 }
 
-impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: Fn(f16) -> f16>
+impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: ActivationFn>
     StaticFeedForwardNetwork<I, HN, IHLC, O, F>
 {
     pub fn new(
@@ -31,7 +33,7 @@ impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: Fn(f
     }
 }
 
-impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: Fn(f16) -> f16 + Copy>
+impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: ActivationFn>
     NeuralNetwork<I, O> for StaticFeedForwardNetwork<I, HN, IHLC, O, F>
 {
     fn feed(&mut self, arr: &[f16; I]) -> [f16; O] {
@@ -54,7 +56,7 @@ impl<const S: usize, const PL: usize> FeedForwardLayer<S, PL> {
         FeedForwardLayer { neurons }
     }
 
-    pub fn feed<F: Fn(f16) -> f16 + Copy>(&self, input: &[f16; PL], activation_fn: F) -> [f16; S] {
+    pub fn feed<F: ActivationFn>(&self, input: &[f16; PL], activation_fn: F) -> [f16; S] {
         let mut list: [f16; S] = [0.0; S];
         for (idx, neuron) in self.neurons.iter().enumerate() {
             list[idx] = neuron.feed(input, activation_fn);
@@ -73,7 +75,7 @@ impl<const PL: usize> FeedForwardNeuron<PL> {
         FeedForwardNeuron { weights, bias }
     }
 
-    pub fn feed<F: Fn(f16) -> f16 + Copy>(&self, input: &[f16; PL], activation_fn: F) -> f16 {
+    pub fn feed<F: ActivationFn>(&self, input: &[f16; PL], activation_fn: F) -> f16 {
         let mut sum = 0.0;
 
         for item in input.iter().zip(self.weights).take(PL) {
@@ -82,7 +84,7 @@ impl<const PL: usize> FeedForwardNeuron<PL> {
 
         sum += self.bias;
 
-        activation_fn(sum)
+        activation_fn.activate(sum)
     }
 }
 
