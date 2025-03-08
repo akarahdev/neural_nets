@@ -16,14 +16,19 @@ where
     fn and_then<const O2: usize, R: NeuralNetwork<O, O2>>(
         self,
         right: R,
-    ) -> AndThenNetwork<I, O, O2, Self, R>;
-}
-
-impl<const I: usize, const O: usize, T: NeuralNetwork<I, O>> NeuralNetworkExt<I, O> for T {
-    fn and_then<const O2: usize, R: NeuralNetwork<O, O2>>(
-        self,
-        right: R,
     ) -> AndThenNetwork<I, O, O2, Self, R> {
         AndThenNetwork { left: self, right }
     }
+
+    fn combine<const I2: usize, const O2: usize, R: NeuralNetwork<I2, O2>>(
+        self,
+        right: R,
+    ) -> CombinedNetwork<I, I2, O, O2, Self, R> {
+        CombinedNetwork {
+            n1: self,
+            n2: right,
+        }
+    }
 }
+
+impl<const I: usize, const O: usize, T: NeuralNetwork<I, O>> NeuralNetworkExt<I, O> for T {}
