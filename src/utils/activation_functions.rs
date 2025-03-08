@@ -1,16 +1,16 @@
 use std::{
-    f16::consts::{E, PI},
+    f32::consts::{E, PI},
     fmt::Debug,
 };
 
 pub trait ActivationFn: Clone + Copy + std::fmt::Debug {
-    fn activate(&self, x: f16) -> f16;
+    fn activate(&self, x: f32) -> f32;
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct Linear;
 impl ActivationFn for Linear {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         x
     }
 }
@@ -18,7 +18,7 @@ impl ActivationFn for Linear {
 #[derive(Debug, Clone, Copy)]
 pub struct BinaryStep;
 impl ActivationFn for BinaryStep {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         if x >= 0.0 { 1.0 } else { 0.0 }
     }
 }
@@ -26,7 +26,7 @@ impl ActivationFn for BinaryStep {
 #[derive(Debug, Clone, Copy)]
 pub struct Sigmoid;
 impl ActivationFn for Sigmoid {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         1.0 / (1.0 + E.powf(-x))
     }
 }
@@ -34,7 +34,7 @@ impl ActivationFn for Sigmoid {
 #[derive(Debug, Clone, Copy)]
 pub struct Tanh;
 impl ActivationFn for Tanh {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         x.tanh()
     }
 }
@@ -42,27 +42,27 @@ impl ActivationFn for Tanh {
 #[derive(Debug, Clone, Copy)]
 pub struct Relu;
 impl ActivationFn for Relu {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         x.max(0.0)
     }
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct LeakyRelu {
-    pub factor: f16,
+    pub factor: f32,
 }
 impl ActivationFn for LeakyRelu {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         x.max(x * -self.factor)
     }
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct Elu {
-    pub factor: f16,
+    pub factor: f32,
 }
 impl ActivationFn for Elu {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         if x >= 0.0 {
             x
         } else {
@@ -74,7 +74,7 @@ impl ActivationFn for Elu {
 #[derive(Debug, Clone, Copy)]
 pub struct Swish;
 impl ActivationFn for Swish {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         let sigmoid = Sigmoid;
         x * sigmoid.activate(x)
     }
@@ -83,7 +83,7 @@ impl ActivationFn for Swish {
 #[derive(Debug, Clone, Copy)]
 pub struct Gelu;
 impl ActivationFn for Gelu {
-    fn activate(&self, x: f16) -> f16 {
+    fn activate(&self, x: f32) -> f32 {
         0.5 * x * (1.0 + ((2.0 / PI).sqrt() * (x + 0.44715 * x.powi(3))).tanh())
     }
 }
@@ -111,7 +111,7 @@ impl ActFns {
         Relu
     }
 
-    pub fn leaky_relu(factor: f16) -> impl ActivationFn {
+    pub fn leaky_relu(factor: f32) -> impl ActivationFn {
         LeakyRelu { factor }
     }
 
@@ -119,7 +119,7 @@ impl ActFns {
         Elu { factor: 1.0 }
     }
 
-    pub fn param_elu(factor: f16) -> impl ActivationFn {
+    pub fn param_elu(factor: f32) -> impl ActivationFn {
         Elu { factor }
     }
 

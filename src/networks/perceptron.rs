@@ -4,13 +4,13 @@ use super::NeuralNetwork;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Perceptron<const I: usize, F: ActivationFn> {
-    weights: [f16; I],
-    bias: f16,
+    weights: [f32; I],
+    bias: f32,
     activation_function: F,
 }
 
 impl<const I: usize, F: ActivationFn> Perceptron<I, F> {
-    pub fn new(weights: [f16; I], bias: f16, activation_function: F) -> Perceptron<I, F> {
+    pub fn new(weights: [f32; I], bias: f32, activation_function: F) -> Perceptron<I, F> {
         Perceptron {
             weights,
             bias,
@@ -20,7 +20,7 @@ impl<const I: usize, F: ActivationFn> Perceptron<I, F> {
 }
 
 impl<const I: usize, F: ActivationFn> NeuralNetwork<I, 1> for Perceptron<I, F> {
-    fn feed(&mut self, arr: &[f16; I]) -> [f16; 1] {
+    fn feed(&mut self, arr: &[f32; I]) -> [f32; 1] {
         let mut sum = 0.0;
         for item in arr.iter().enumerate() {
             sum += *item.1 * self.weights[item.0];

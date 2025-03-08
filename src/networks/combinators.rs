@@ -15,7 +15,7 @@ pub struct AndThenNetwork<
 impl<const I: usize, const M: usize, const O: usize, L: NeuralNetwork<I, M>, R: NeuralNetwork<M, O>>
     NeuralNetwork<I, O> for AndThenNetwork<I, M, O, L, R>
 {
-    fn feed(&mut self, arr: &[f16; I]) -> [f16; O] {
+    fn feed(&mut self, arr: &[f32; I]) -> [f32; O] {
         self.right.feed(&self.left.feed(arr))
     }
 }
@@ -42,7 +42,7 @@ impl<
     N2: NeuralNetwork<I2, O2>,
 > NeuralNetwork<{ I1 + I2 }, { O1 + O2 }> for AlongsideNetwork<I1, I2, O1, O2, N1, N2>
 {
-    fn feed(&mut self, arr: &[f16; I1 + I2]) -> [f16; O1 + O2] {
+    fn feed(&mut self, arr: &[f32; I1 + I2]) -> [f32; O1 + O2] {
         let n1o = self.n1.feed(&arr[0..I1].try_into().unwrap());
         let n2o = self.n2.feed(&arr[{ I1 }..{ I1 + I2 }].try_into().unwrap());
         let mut out = [0.0; O1 + O2];
@@ -76,7 +76,7 @@ impl<
     N2: NeuralNetwork<I, O2>,
 > NeuralNetwork<I, { O1 + O2 }> for ReplicateInputNetwork<I, O1, O2, N1, N2>
 {
-    fn feed(&mut self, arr: &[f16; I]) -> [f16; O1 + O2] {
+    fn feed(&mut self, arr: &[f32; I]) -> [f32; O1 + O2] {
         let n1o = self.n1.feed(arr);
         let n2o = self.n2.feed(arr);
         let mut out = [0.0; O1 + O2];

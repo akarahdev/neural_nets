@@ -36,7 +36,7 @@ impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: Acti
 impl<const I: usize, const HN: usize, const IHLC: usize, const O: usize, F: ActivationFn>
     NeuralNetwork<I, O> for StaticFeedForwardNetwork<I, HN, IHLC, O, F>
 {
-    fn feed(&mut self, arr: &[f16; I]) -> [f16; O] {
+    fn feed(&mut self, arr: &[f32; I]) -> [f32; O] {
         let mut array = self.first_hidden_layer.feed(arr, self.activation_function);
 
         for intermediate in &self.intermediate_hidden_layers {
@@ -56,8 +56,8 @@ impl<const S: usize, const PL: usize> FeedForwardLayer<S, PL> {
         FeedForwardLayer { neurons }
     }
 
-    pub fn feed<F: ActivationFn>(&self, input: &[f16; PL], activation_fn: F) -> [f16; S] {
-        let mut list: [f16; S] = [0.0; S];
+    pub fn feed<F: ActivationFn>(&self, input: &[f32; PL], activation_fn: F) -> [f32; S] {
+        let mut list: [f32; S] = [0.0; S];
         for (idx, neuron) in self.neurons.iter().enumerate() {
             list[idx] = neuron.feed(input, activation_fn);
         }
@@ -66,16 +66,16 @@ impl<const S: usize, const PL: usize> FeedForwardLayer<S, PL> {
 }
 
 pub struct FeedForwardNeuron<const PL: usize> {
-    weights: [f16; PL],
-    bias: f16,
+    weights: [f32; PL],
+    bias: f32,
 }
 
 impl<const PL: usize> FeedForwardNeuron<PL> {
-    pub fn new(weights: [f16; PL], bias: f16) -> Self {
+    pub fn new(weights: [f32; PL], bias: f32) -> Self {
         FeedForwardNeuron { weights, bias }
     }
 
-    pub fn feed<F: ActivationFn>(&self, input: &[f16; PL], activation_fn: F) -> f16 {
+    pub fn feed<F: ActivationFn>(&self, input: &[f32; PL], activation_fn: F) -> f32 {
         let mut sum = 0.0;
 
         for item in input.iter().zip(self.weights).take(PL) {

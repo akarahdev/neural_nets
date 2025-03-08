@@ -6,7 +6,7 @@ mod combinators;
 pub use combinators::*;
 
 pub trait NeuralNetwork<const I: usize, const O: usize> {
-    fn feed(&mut self, arr: &[f16; I]) -> [f16; O];
+    fn feed(&mut self, arr: &[f32; I]) -> [f32; O];
 }
 
 pub trait NeuralNetworkExt<const I: usize, const O: usize>
