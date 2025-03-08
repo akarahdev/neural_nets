@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
+
 use super::NeuralNetwork;
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct AndThenNetwork<
     const I: usize,
     const M: usize,
@@ -20,7 +22,7 @@ impl<const I: usize, const M: usize, const O: usize, L: NeuralNetwork<I, M>, R: 
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct AlongsideNetwork<
     const I1: usize,
     const I2: usize,
@@ -56,7 +58,7 @@ impl<
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct ReplicateInputNetwork<
     const I: usize,
     const O1: usize,

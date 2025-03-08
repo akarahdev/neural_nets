@@ -3,11 +3,13 @@ use std::{
     fmt::Debug,
 };
 
+use serde::{Deserialize, Serialize};
+
 pub trait ActivationFn: Clone + Copy + std::fmt::Debug {
     fn activate(&self, x: f32) -> f32;
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Linear;
 impl ActivationFn for Linear {
     fn activate(&self, x: f32) -> f32 {
@@ -15,7 +17,7 @@ impl ActivationFn for Linear {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct BinaryStep;
 impl ActivationFn for BinaryStep {
     fn activate(&self, x: f32) -> f32 {
@@ -23,7 +25,7 @@ impl ActivationFn for BinaryStep {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Sigmoid;
 impl ActivationFn for Sigmoid {
     fn activate(&self, x: f32) -> f32 {
@@ -31,7 +33,7 @@ impl ActivationFn for Sigmoid {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Tanh;
 impl ActivationFn for Tanh {
     fn activate(&self, x: f32) -> f32 {
@@ -39,7 +41,7 @@ impl ActivationFn for Tanh {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Relu;
 impl ActivationFn for Relu {
     fn activate(&self, x: f32) -> f32 {
@@ -47,7 +49,7 @@ impl ActivationFn for Relu {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default, Serialize, Deserialize)]
 pub struct LeakyRelu {
     pub factor: f32,
 }
@@ -57,7 +59,7 @@ impl ActivationFn for LeakyRelu {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default, Serialize, Deserialize)]
 pub struct Elu {
     pub factor: f32,
 }
@@ -71,7 +73,7 @@ impl ActivationFn for Elu {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Swish;
 impl ActivationFn for Swish {
     fn activate(&self, x: f32) -> f32 {
@@ -80,7 +82,7 @@ impl ActivationFn for Swish {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash, Default, Serialize, Deserialize)]
 pub struct Gelu;
 impl ActivationFn for Gelu {
     fn activate(&self, x: f32) -> f32 {
@@ -91,43 +93,43 @@ impl ActivationFn for Gelu {
 pub struct ActFns;
 
 impl ActFns {
-    pub fn linear() -> impl ActivationFn {
+    pub fn linear() -> Linear {
         Linear
     }
 
-    pub fn binary_step() -> impl ActivationFn {
+    pub fn binary_step() -> BinaryStep {
         BinaryStep
     }
 
-    pub fn sigmoid() -> impl ActivationFn {
+    pub fn sigmoid() -> Sigmoid {
         Sigmoid
     }
 
-    pub fn tanh() -> impl ActivationFn {
+    pub fn tanh() -> Tanh {
         Tanh
     }
 
-    pub fn relu() -> impl ActivationFn {
+    pub fn relu() -> Relu {
         Relu
     }
 
-    pub fn leaky_relu(factor: f32) -> impl ActivationFn {
+    pub fn leaky_relu(factor: f32) -> LeakyRelu {
         LeakyRelu { factor }
     }
 
-    pub fn elu() -> impl ActivationFn {
+    pub fn elu() -> Elu {
         Elu { factor: 1.0 }
     }
 
-    pub fn param_elu(factor: f32) -> impl ActivationFn {
+    pub fn param_elu(factor: f32) -> Elu {
         Elu { factor }
     }
 
-    pub fn swish() -> impl ActivationFn {
+    pub fn swish() -> Swish {
         Swish
     }
 
-    pub fn gelu() -> impl ActivationFn {
+    pub fn gelu() -> Gelu {
         Gelu
     }
 }

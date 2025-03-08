@@ -1,18 +1,24 @@
-use crate::utils::ActivationFn;
+use serde::{Deserialize, Serialize};
+
+use crate::utils::{ActivationFn, Array};
 
 use super::NeuralNetwork;
 
-#[derive(Debug, Clone, PartialEq, Copy, PartialOrd)]
+#[derive(Debug, Clone, PartialEq, Copy, PartialOrd, Serialize, Deserialize)]
 pub struct Perceptron<const I: usize, F: ActivationFn> {
-    weights: [f32; I],
+    weights: Array<f32, I>,
     bias: f32,
     activation_function: F,
 }
 
 impl<const I: usize, F: ActivationFn> Perceptron<I, F> {
-    pub fn new(weights: [f32; I], bias: f32, activation_function: F) -> Perceptron<I, F> {
+    pub fn new(
+        weights: impl Into<Array<f32, I>>,
+        bias: f32,
+        activation_function: F,
+    ) -> Perceptron<I, F> {
         Perceptron {
-            weights,
+            weights: weights.into(),
             bias,
             activation_function,
         }
@@ -89,5 +95,14 @@ mod tests {
 
         let output = perceptron.feed(&[0.0, 0.0]);
         assert_eq!(output[0], 0.0, "False | False != False");
+    }
+
+    #[test]
+    pub fn save_perceptron() {
+        let perceptron = Perceptron::new([1.0, 1.0], -0.5, ActFns::binary_step());
+        let string = serde_json::to_string(&perceptron).unwrap();
+        eprintln!("{}", string);
+        let new_perceptron = serde_json::from_str(&string).unwrap();
+        assert_eq!(perceptron, new_perceptron);
     }
 }
