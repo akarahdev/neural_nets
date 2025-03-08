@@ -30,7 +30,7 @@ impl<const I: usize, F: Fn(f16) -> f16> NeuralNetwork<I, 1> for Perceptron<I, F>
 
 #[cfg(test)]
 mod tests {
-    use crate::networks::NeuralNetwork;
+    use crate::{networks::NeuralNetwork, utils::ActFns};
 
     use super::Perceptron;
 
@@ -43,21 +43,21 @@ mod tests {
 
     #[test]
     pub fn perceptron_doubler() {
-        let mut perceptron = Perceptron::new([2.0], 0.0, |x| x);
+        let mut perceptron = Perceptron::new([2.0], 0.0, ActFns::linear());
         let output = perceptron.feed(&[2.0]);
         assert_eq!(output[0], 4.0);
     }
 
     #[test]
     pub fn perceptron_biases() {
-        let mut perceptron = Perceptron::new([1.0, 1.0], 6.0, |x| x);
+        let mut perceptron = Perceptron::new([1.0, 1.0], 6.0, ActFns::linear());
         let output = perceptron.feed(&[1.0, 2.0]);
         assert_eq!(output[0], 9.0);
     }
 
     #[test]
     pub fn perceptron_and_gate() {
-        let mut perceptron = Perceptron::new([1.0, 1.0], -1.5, |x| if x > 0.0 { 1.0 } else { 0.0 });
+        let mut perceptron = Perceptron::new([1.0, 1.0], -1.5, ActFns::binary_step());
 
         let output = perceptron.feed(&[1.0, 0.0]);
         assert_eq!(output[0], 0.0, "True & False != False");
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     pub fn perceptron_or_gate() {
-        let mut perceptron = Perceptron::new([1.0, 1.0], -0.5, |x| if x > 0.0 { 1.0 } else { 0.0 });
+        let mut perceptron = Perceptron::new([1.0, 1.0], -0.5, ActFns::binary_step());
 
         let output = perceptron.feed(&[1.0, 0.0]);
         assert_eq!(output[0], 1.0, "True | False != True");

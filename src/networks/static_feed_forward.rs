@@ -90,21 +90,23 @@ impl<const PL: usize, F: Fn(f16) -> f16> FeedForwardNeuron<PL, F> {
 
 #[cfg(test)]
 mod tests {
-    use crate::networks::NeuralNetwork;
+    use crate::{networks::NeuralNetwork, utils::ActFns};
 
     use super::{FeedForwardLayer, FeedForwardNeuron, StaticFeedForwardNetwork};
 
     #[test]
     pub fn feed_forward_xor() {
-        let step_function = |x: f16| if x >= 0.0 { 1.0 } else { 0.0 };
-
         let mut xor_network = StaticFeedForwardNetwork::new(
             FeedForwardLayer::new([
-                FeedForwardNeuron::new([1.0, 1.0], -0.5, step_function),
-                FeedForwardNeuron::new([-1.0, -1.0], 1.5, step_function),
+                FeedForwardNeuron::new([1.0, 1.0], -0.5, ActFns::binary_step()),
+                FeedForwardNeuron::new([-1.0, -1.0], 1.5, ActFns::binary_step()),
             ]),
             [],
-            FeedForwardLayer::new([FeedForwardNeuron::new([1.0, 1.0], -1.5, step_function)]),
+            FeedForwardLayer::new([FeedForwardNeuron::new(
+                [1.0, 1.0],
+                -1.5,
+                ActFns::binary_step(),
+            )]),
         );
 
         let output = xor_network.feed(&[1.0, 1.0]);
